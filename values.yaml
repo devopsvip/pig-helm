@@ -1,0 +1,11 @@
+pig-mysql: 
+  replicaCount: 1
+  images: ccr.ccs.tencentyun.com/pigservice/pig-mysql:8.0.32
+  pullPolicy: IfNotPresent
+  containerPort: 3306
+  env:
+    - name: MYSQL_ROOT_HOST
+      value: '%'
+    - name: MYSQL_ROOT_PASSWORD
+      value: root
+  
