@@ -19,7 +19,6 @@ spec:
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.pigmysql.images }}"
-          imagePullPolicy: {{ .Values.pigmysql.pullPolicy }}
           ports:
             - name: http
               containerPort: {{ .Values.pigmysql.containerPort }}
