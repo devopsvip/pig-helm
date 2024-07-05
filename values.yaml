@@ -3,6 +3,9 @@ pig-mysql:
   images: ccr.ccs.tencentyun.com/pigservice/pig-mysql:8.0.32
   pullPolicy: IfNotPresent
   containerPort: 3306
+  service:
+    type: "ClusterIP"
+    port: 3306
   env:
     - name: MYSQL_ROOT_HOST
       value: '%'
