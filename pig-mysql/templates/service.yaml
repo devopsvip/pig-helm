@@ -1,15 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "pig-mysql.fullname" . }}
+  name: {{ include "pigmysql.fullname" . }}
   labels:
-    {{- include "pig-mysql.labels" . | nindent 4 }}
+    {{- include "pigmysql.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.pig-mysql.service.type }}
+  type: {{ .Values.pigmysql.service.type }}
   ports:
-    - port: {{ .Values.pig-mysql.service.port }}
+    - port: {{ .Values.pigmysql.service.port }}
       targetPort: http
       protocol: TCP
       name: http
   selector:
-    {{- include "pig-mysql.selectorLabels" . | nindent 4 }}
+    {{- include "pigmysql.selectorLabels" . | nindent 4 }}

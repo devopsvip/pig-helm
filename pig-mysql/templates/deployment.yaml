@@ -3,26 +3,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "pig-mysql.fullname" . }}
+  name: {{ include "pigmysql.fullname" . }}
   labels:
-    {{- include "pig-mysql.labels" . | nindent 4 }}
+    {{- include "pigmysql.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.pig-mysql.replicaCount }}
+  replicas: {{ .Values.pigmysql.replicaCount }}
   selector:
     matchLabels:
-      {{- include "pig-mysql.selectorLabels" . | nindent 6 }}
+      {{- include "pigmysql.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "pig-mysql.selectorLabels" . | nindent 8 }}
+        {{- include "pigmysql.selectorLabels" . | nindent 8 }}
     spec:
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.pig-mysql.images }}"
-          imagePullPolicy: {{ .Values.pig-mysql.pullPolicy }}
+          image: "{{ .Values.pigmysql.images }}"
+          imagePullPolicy: {{ .Values.pigmysql.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.pig-mysql.containerPort }}
+              containerPort: {{ .Values.pigmysql.containerPort }}
               protocol: TCP
           env:
-            {{- toYaml .Values.pig-mysql.env | nindent 12 }}
+            {{- toYaml .Values.pigmysql.env | nindent 12 }}
