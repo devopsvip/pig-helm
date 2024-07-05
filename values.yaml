@@ -1,6 +1,6 @@
 pigmysql: 
   replicaCount: 1
-  images: ccr.ccs.tencentyun.com/pigservice/pigmysql:8.0.32
+  images: ccr.ccs.tencentyun.com/pigservice/pig-mysql:8.0.32
   pullPolicy: IfNotPresent
   containerPort: 3306
   service:
