@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: pig-gateway
+  name: pig-quartz
   labels:
     {{- include "pigservices.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.piggateway.service.type }}
+  type: {{ .Values.pigquartz.service.type }}
   ports:
-    {{- toYaml .Values.piggateway.service.port | nindent 4 }}
+    {{- toYaml .Values.pigquartz.service.port | nindent 4 }}
   selector:
-    service: pig-gateway
+    service: pig-quartz
