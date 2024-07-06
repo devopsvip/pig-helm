@@ -53,3 +53,22 @@ pigregister:
       value: 'pig-gateway.pigservices.svc.cluster.local'
     - name: GATEWAY-PORT
       value: '9999'
+piggateway: 
+  domainName: pig-register.idevops.site
+  replicaCount: 1
+  images: ccr.ccs.tencentyun.com/pigservice/pig-gateway:RELEASE-1.1.1
+  pullPolicy: IfNotPresent
+  containerPort: 
+    - containerPort: 9999
+      protocol: TCP
+  service:
+    type: "ClusterIP"
+    port: 
+      - name: "web"
+        port: 9999
+        targetPort: 9999
+  env:
+    - name: "NACOS_HOST"
+      value: 'pig-register.pigservices.svc.cluster.local.'
+    - name: "NACOS_PORT"
+      value: '8848'
