@@ -156,7 +156,7 @@ pigauth:
       value: 'pig-register.pigservices.svc.cluster.local.'
     - name: "NACOS_PORT"
       value: '8848'
-pig-quartz:
+pigquartz:
   replicaCount: 1
   images: ccr.ccs.tencentyun.com/pigservice/pig-quartz:RELEASE-1.1.1
   pullPolicy: IfNotPresent
