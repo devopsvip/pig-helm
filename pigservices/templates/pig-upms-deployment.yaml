@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pig-upms
+  labels:
+    {{- include "pigservices.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.pigupms.replicaCount }}
+  selector:
+    matchLabels:
+      service: pig-upms
+  template:
+    metadata:
+      labels:
+       service: pig-upms
+    spec:
+      containers:
+        - name: pig-upms
+          image: "{{ .Values.pigupms.images }}"
+          ports:
+            {{- toYaml .Values.pigupms.containerPort | nindent 12 }}
+          env:
+            {{- toYaml .Values.pigupms.env | nindent 12 }}

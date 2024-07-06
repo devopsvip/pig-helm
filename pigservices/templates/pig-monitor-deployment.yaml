@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pig-monitor
+  labels:
+    {{- include "pigservices.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.pigmonitor.replicaCount }}
+  selector:
+    matchLabels:
+      service: pig-monitor
+  template:
+    metadata:
+      labels:
+       service: pig-monitor
+    spec:
+      containers:
+        - name: pig-monitor
+          image: "{{ .Values.pigmonitor.images }}"
+          ports:
+            {{- toYaml .Values.pigmonitor.containerPort | nindent 12 }}
+          env:
+            {{- toYaml .Values.pigmonitor.env | nindent 12 }}

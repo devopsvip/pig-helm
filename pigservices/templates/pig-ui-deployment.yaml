@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pig-ui
+  labels:
+    {{- include "pigservices.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.pigui.replicaCount }}
+  selector:
+    matchLabels:
+      service: pig-ui
+  template:
+    metadata:
+      labels:
+       service: pig-ui
+    spec:
+      containers:
+        - name: pig-ui
+          image: "{{ .Values.pigui.images }}"
+          ports:
+            {{- toYaml .Values.pigui.containerPort | nindent 12 }}

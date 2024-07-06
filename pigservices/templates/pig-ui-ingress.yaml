@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: "pig-ui-ingress"
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  labels:
+    {{- include "pigservices.labels" . | nindent 4 }}
+spec:
+  rules:
+  - host: {{ .Values.pigui.domainName }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: pig-ui
+            port:
+              name: web
+
+
+

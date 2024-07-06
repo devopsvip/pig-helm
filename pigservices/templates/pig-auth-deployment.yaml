@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pig-auth
+  labels:
+    {{- include "pigservices.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.pigauth.replicaCount }}
+  selector:
+    matchLabels:
+      service: pig-auth
+  template:
+    metadata:
+      labels:
+       service: pig-auth
+    spec:
+      containers:
+        - name: pig-auth
+          image: "{{ .Values.pigauth.images }}"
+          ports:
+            {{- toYaml .Values.pigauth.containerPort | nindent 12 }}
+          env:
+            {{- toYaml .Values.pigauth.env | nindent 12 }}

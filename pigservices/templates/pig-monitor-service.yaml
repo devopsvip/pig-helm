@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pig-monitor
+  labels:
+    {{- include "pigservices.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.pigmonitor.service.type }}
+  ports:
+    {{- toYaml .Values.pigmonitor.service.port | nindent 4 }}
+  selector:
+    service: pig-monitor
