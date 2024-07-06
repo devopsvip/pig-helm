@@ -11,4 +11,11 @@ pigmysql:
       value: '%'
     - name: MYSQL_ROOT_PASSWORD
       value: root
-  
+pigredis: 
+  replicaCount: 1
+  images: ccr.ccs.tencentyun.com/pigservice/redis:7.2.4
+  pullPolicy: IfNotPresent
+  containerPort: 6379
+  service:
+    type: "ClusterIP"
+    port: 6379
