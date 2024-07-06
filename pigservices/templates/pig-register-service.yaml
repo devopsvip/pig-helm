@@ -7,6 +7,6 @@ metadata:
 spec:
   type: {{ .Values.pigregister.service.type }}
   ports:
-    {{- toYaml .Values.pigregister.port | nindent 4 }}
+    {{- toYaml .Values.pigregister.service.port | nindent 4 }}
   selector:
     service: pig-register
