@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "pigregister.fullname" . }}
+  labels:
+    {{- include "pigregister.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.pigregister.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "pigregister.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "pigregister.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.pigregister.images }}"
+          ports:
+            {{- toYaml .Values.pigregister.containerPort | nindent 12 }}
+          env:
+            {{- toYaml .Values.pigregister.env | nindent 12 }}
