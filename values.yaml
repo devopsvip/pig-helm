@@ -20,6 +20,7 @@ pigredis:
     type: "ClusterIP"
     port: 6379
 pigregister: 
+  domainName: pig-register.idevops.site
   replicaCount: 1
   images: ccr.ccs.tencentyun.com/pigservice/pig-register:RELEASE-1.1.1
   pullPolicy: IfNotPresent

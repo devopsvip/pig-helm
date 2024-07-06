@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: "pig-register-ingress"
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  labels:
+    {{- include "pigservices.labels" . | nindent 4 }}
+spec:
+  rules:
+  - host: {{ .Values.pigregister.domainName }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: pig-register
+            port:
+              name: web
+
+
+

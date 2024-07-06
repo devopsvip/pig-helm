@@ -8,11 +8,11 @@ spec:
   replicas: {{ .Values.pigregister.replicaCount }}
   selector:
     matchLabels:
-      {{- include "pigservices.selectorLabels" . | nindent 6 }}
+      service: pig-register
   template:
     metadata:
       labels:
-        {{- include "pigservices.selectorLabels" . | nindent 8 }}
+       service: pig-register
     spec:
       containers:
         - name: {{ .Chart.Name }}

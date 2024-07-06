@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "pigservices.fullname" . }}
+  name: pig-register
   labels:
     {{- include "pigservices.labels" . | nindent 4 }}
 spec:
@@ -9,4 +9,4 @@ spec:
   ports:
     {{- toYaml .Values.pigregister.port | nindent 4 }}
   selector:
-    {{- include "pigservices.selectorLabels" . | nindent 4 }}
+    service: pig-register
