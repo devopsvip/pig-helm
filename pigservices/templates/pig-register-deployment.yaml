@@ -15,7 +15,7 @@ spec:
        service: pig-register
     spec:
       containers:
-        - name: {{ .Chart.Name }}
+        - name: pig-register
           image: "{{ .Values.pigregister.images }}"
           ports:
             {{- toYaml .Values.pigregister.containerPort | nindent 12 }}
