@@ -5,6 +5,7 @@ metadata:
   labels:
     {{- include "pigmysql.labels" . | nindent 4 }}
 spec:
+  type: {{ .Values.pigmysql.service.type }}
   ports:
     - port: {{ .Values.pigmysql.service.port }}
       targetPort: http
