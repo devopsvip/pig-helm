@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "pigregister.fullname" . }}
+  name: {{ include "pigservices.fullname" . }}
   labels:
-    {{- include "pigregister.labels" . | nindent 4 }}
+    {{- include "pigservices.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.pigregister.replicaCount }}
   selector:
     matchLabels:
-      {{- include "pigregister.selectorLabels" . | nindent 6 }}
+      {{- include "pigservices.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "pigregister.selectorLabels" . | nindent 8 }}
+        {{- include "pigservices.selectorLabels" . | nindent 8 }}
     spec:
       containers:
         - name: {{ .Chart.Name }}
