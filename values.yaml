@@ -55,7 +55,7 @@ pigregister:
       value: '9999'
     # 从Dockerfile把参数拿出来替换加上skywalking配置
     - name: JAVA_OPTS
-      value: "-Xms128m -Xmx256m -Djava.security.egd=file:/dev/./urandom -javaagent:/skywalking-agent/agent/skywalking-agent.jar -Dskywalking.agent.service_name=pig-register -Dskywalking.collector.backend_service=skywalking-oap.skywalking.svc.cluster.local:11800 "
+      value: "-Xms512m -Xmx2048m -Djava.security.egd=file:/dev/./urandom -javaagent:/skywalking-agent/agent/skywalking-agent.jar -Dskywalking.agent.service_name=pig-register -Dskywalking.collector.backend_service=skywalking-oap.skywalking.svc.cluster.local:11800 "
 piggateway: 
   domainName: pig-register.idevops.site
   replicaCount: 1
