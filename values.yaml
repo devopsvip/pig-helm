@@ -55,7 +55,7 @@ pigregister:
       value: '9999'
     # 从Dockerfile把参数拿出来替换加上skywalking配置
     - name: JAVA_OPTS
-      value: "-Xms512m -Xmx2048m -Djava.security.egd=file:/dev/./urandom -javaagent:/skywalking-agent/agent/skywalking-agent.jar -Dskywalking.agent.service_name=pig-register -Dskywalking.collector.backend_service=skywalking-oap.skywalking.svc.cluster.local:11800 "
+      value: "-Xms512m -Xmx2048m  -javaagent:/skywalking-agent/agent/skywalking-agent.jar -Dskywalking.agent.service_name=pig-register -Dskywalking.collector.backend_service=skywalking-oap.skywalking.svc.cluster.local:11800 "
 piggateway: 
   domainName: pig-register.idevops.site
   replicaCount: 1
@@ -77,7 +77,7 @@ piggateway:
       value: '8848'
     # 从Dockerfile把参数拿出来替换加上skywalking配置
     - name: JAVA_OPTS
-      value: "-Xms512m -Xmx2048m -Djava.security.egd=file:/dev/./urandom -javaagent:/skywalking-agent/agent/skywalking-agent.jar -Dskywalking.agent.service_name=pig-gateway -Dskywalking.collector.backend_service=skywalking-oap.skywalking.svc.cluster.local:11800 "
+      value: "-Xms512m -Xmx2048m -javaagent:/skywalking-agent/agent/skywalking-agent.jar -Dskywalking.agent.service_name=pig-gateway -Dskywalking.collector.backend_service=skywalking-oap.skywalking.svc.cluster.local:11800 "
 pigupms:
   replicaCount: 1
   images: ccr.ccs.tencentyun.com/pigservice/pig-upms:RELEASE-1.1.1
@@ -104,7 +104,7 @@ pigupms:
       value: 'pig'
     # 从Dockerfile把参数拿出来替换加上skywalking配置
     - name: JAVA_OPTS
-      value: "-Xms512m -Xmx1024m -Djava.security.egd=file:/dev/./urandom -javaagent:/skywalking-agent/agent/skywalking-agent.jar -Dskywalking.agent.service_name=pig-upms -Dskywalking.collector.backend_service=skywalking-oap.skywalking.svc.cluster.local:11800 "
+      value: "-Xms512m -Xmx1024m -javaagent:/skywalking-agent/agent/skywalking-agent.jar -Dskywalking.agent.service_name=pig-upms -Dskywalking.collector.backend_service=skywalking-oap.skywalking.svc.cluster.local:11800 "
 pigmonitor: 
   replicaCount: 1
   images: ccr.ccs.tencentyun.com/pigservice/pig-monitor:RELEASE-1.1.1
@@ -173,7 +173,7 @@ pigauth:
       value: '8848'
     # 从Dockerfile把参数拿出来替换加上skywalking配置
     - name: JAVA_OPTS
-      value: "-Xms512m -Xmx1024m -Djava.security.egd=file:/dev/./urandom -javaagent:/skywalking-agent/agent/skywalking-agent.jar -Dskywalking.agent.service_name=pig-auth -Dskywalking.collector.backend_service=skywalking-oap.skywalking.svc.cluster.local:11800 "
+      value: "-Xms512m -Xmx1024m -javaagent:/skywalking-agent/agent/skywalking-agent.jar -Dskywalking.agent.service_name=pig-auth -Dskywalking.collector.backend_service=skywalking-oap.skywalking.svc.cluster.local:11800 "
 pigquartz:
   replicaCount: 1
   images: ccr.ccs.tencentyun.com/pigservice/pig-quartz:RELEASE-1.1.1
