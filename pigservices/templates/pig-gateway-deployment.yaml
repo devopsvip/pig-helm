@@ -14,6 +14,8 @@ spec:
       labels:
        service: pig-gateway
     spec:
+      initContainers:
+        {{- toYaml .Values.initContainers | nindent 8 }}
       containers:
         - name: pig-gateway
           image: "{{ .Values.piggateway.images }}"
@@ -21,3 +23,7 @@ spec:
             {{- toYaml .Values.piggateway.containerPort | nindent 12 }}
           env:
             {{- toYaml .Values.piggateway.env | nindent 12 }}
+          volumeMounts:
+            {{- toYaml .Values.volumeMounts | nindent 12 }}
+      volumes:
+        {{- toYaml .Values.volumes | nindent 8 }} 

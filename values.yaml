@@ -53,6 +53,9 @@ pigregister:
       value: 'pig-gateway.pigservices.svc.cluster.local'
     - name: GATEWAY-PORT
       value: '9999'
+    # 从Dockerfile把参数拿出来替换加上skywalking配置
+    - name: JAVA_OPTS
+      value: "-Xms128m -Xmx256m -Djava.security.egd=file:/dev/./urandom -javaagent:/skywalking-agent/skywalking-agent.jar -Dskywalking.agent.service_name=pig-register -Dskywalking.collector.backend_service=skywalking-oap.skywalking.svc.cluster.local:11800 "
 piggateway: 
   domainName: pig-register.idevops.site
   replicaCount: 1
@@ -72,6 +75,9 @@ piggateway:
       value: 'pig-register.pigservices.svc.cluster.local.'
     - name: "NACOS_PORT"
       value: '8848'
+    # 从Dockerfile把参数拿出来替换加上skywalking配置
+    - name: JAVA_OPTS
+      value: "-Xms128m -Xmx256m -Djava.security.egd=file:/dev/./urandom -javaagent:/skywalking-agent/skywalking-agent.jar -Dskywalking.agent.service_name=pig-gateway -Dskywalking.collector.backend_service=skywalking-oap.skywalking.svc.cluster.local:11800 "
 pigupms:
   replicaCount: 1
   images: ccr.ccs.tencentyun.com/pigservice/pig-upms:RELEASE-1.1.1
@@ -96,6 +102,9 @@ pigupms:
       value: '3306'  
     - name: MYSQL_DB
       value: 'pig'
+    # 从Dockerfile把参数拿出来替换加上skywalking配置
+    - name: JAVA_OPTS
+      value: "-Xms128m -Xmx256m -Djava.security.egd=file:/dev/./urandom -javaagent:/skywalking-agent/skywalking-agent.jar -Dskywalking.agent.service_name=pig-upms -Dskywalking.collector.backend_service=skywalking-oap.skywalking.svc.cluster.local:11800 "
 pigmonitor: 
   replicaCount: 1
   images: ccr.ccs.tencentyun.com/pigservice/pig-monitor:RELEASE-1.1.1
@@ -114,6 +123,9 @@ pigmonitor:
       value: 'pig-register.pigservices.svc.cluster.local.'
     - name: "NACOS_PORT"
       value: '8848'
+    # 从Dockerfile把参数拿出来替换加上skywalking配置
+    - name: JAVA_OPTS
+      value: "-Xms128m -Xmx256m -Djava.security.egd=file:/dev/./urandom -javaagent:/skywalking-agent/skywalking-agent.jar -Dskywalking.agent.service_name=pig-monitor -Dskywalking.collector.backend_service=skywalking-oap.skywalking.svc.cluster.local:11800 "
 pigcodegen:
   replicaCount: 1
   images: ccr.ccs.tencentyun.com/pigservice/pig-codegen:RELEASE-1.1.1
@@ -138,6 +150,9 @@ pigcodegen:
       value: '3306'  
     - name: MYSQL_DB
       value: 'pig'
+    # 从Dockerfile把参数拿出来替换加上skywalking配置
+    - name: JAVA_OPTS
+      value: "-Xms128m -Xmx256m -Djava.security.egd=file:/dev/./urandom -javaagent:/skywalking-agent/skywalking-agent.jar -Dskywalking.agent.service_name=pig-codegen -Dskywalking.collector.backend_service=skywalking-oap.skywalking.svc.cluster.local:11800 "
 pigauth:
   replicaCount: 1
   images: ccr.ccs.tencentyun.com/pigservice/pig-auth:RELEASE-1.1.1
@@ -156,6 +171,9 @@ pigauth:
       value: 'pig-register.pigservices.svc.cluster.local.'
     - name: "NACOS_PORT"
       value: '8848'
+    # 从Dockerfile把参数拿出来替换加上skywalking配置
+    - name: JAVA_OPTS
+      value: "-Xms128m -Xmx256m -Djava.security.egd=file:/dev/./urandom -javaagent:/skywalking-agent/skywalking-agent.jar -Dskywalking.agent.service_name=pig-auth -Dskywalking.collector.backend_service=skywalking-oap.skywalking.svc.cluster.local:11800 "
 pigquartz:
   replicaCount: 1
   images: ccr.ccs.tencentyun.com/pigservice/pig-quartz:RELEASE-1.1.1
@@ -180,6 +198,9 @@ pigquartz:
       value: '3306'  
     - name: MYSQL_DB
       value: 'pig'
+    # 从Dockerfile把参数拿出来替换加上skywalking配置
+    - name: JAVA_OPTS
+      value: "-Xms128m -Xmx256m -Djava.security.egd=file:/dev/./urandom -javaagent:/skywalking-agent/skywalking-agent.jar -Dskywalking.agent.service_name=pig-quartz -Dskywalking.collector.backend_service=skywalking-oap.skywalking.svc.cluster.local:11800 "
 pigui: 
   domainName: pig.idevops.site
   replicaCount: 1
@@ -194,3 +215,16 @@ pigui:
       - name: "web"
         port: 80
         targetPort: 80
+initContainers:
+  - name: init-skywalking-agent
+    image: ccr.ccs.tencentyun.com/devopsvip/skywalking-agent-sidcar:9.2.0
+    command: ["sh", "-c", "cp /usr/skywalking/agent/skywalking-agent.jar /skywalking-agent"]
+    volumeMounts:
+      - name: skywalking-agent
+        mountPath: /skywalking-agent
+volumeMounts:
+  - name: skywalking-agent
+    mountPath: /skywalking-agent
+volumes:
+  - name: skywalking-agent
+    emptyDir: {}
