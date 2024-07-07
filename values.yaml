@@ -54,8 +54,8 @@ pigregister:
     - name: GATEWAY-PORT
       value: '9999'
     # 从Dockerfile把参数拿出来替换加上skywalking配置
-    # - name: JAVA_OPTS
-    #   value: "-Xms512m -Xmx2048m  -javaagent:/skywalking-agent/agent/skywalking-agent.jar -Dskywalking.agent.service_name=pig-register -Dskywalking.collector.backend_service=skywalking-oap.skywalking.svc.cluster.local:11800 "
+    - name: JAVA_OPTS
+      value: "-Xms512m -Xmx8192m  -javaagent:/skywalking-agent/agent/skywalking-agent.jar -Dskywalking.agent.service_name=pig-register -Dskywalking.collector.backend_service=skywalking-oap.skywalking.svc.cluster.local:11800 "
 piggateway: 
   domainName: pig-register.idevops.site
   replicaCount: 1
