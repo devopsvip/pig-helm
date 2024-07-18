@@ -60,6 +60,11 @@ data:
         Time_Keep Off
         Time_Key time
         Time_Format %Y-%m-%dT%H:%M:%S.%L
+    [PARSER]
+        Name json
+        Format json
+        Time_Key timestamp
+        Time_Format %Y-%m-%dT%H:%M:%S.%L
 
   fluent-bit.conf: |
     [SERVICE]
@@ -76,14 +81,19 @@ data:
     [INPUT]
         Name tail
         Path /piglogs/*.log
-        multiline.parser docker, cri
-        Tag pig.*
+        Path_Key filename
+        Tag piglogs
         Mem_Buf_Limit 5MB
         Skip_Long_Lines On
+        Parser json
+    [FILTER]
+        Name record_modifier
+        Match piglogs
+        Record hostname ${HOSTNAME}
 
     [OUTPUT]
         Name es
-        Match pig.*
+        Match piglogs
         Index fluentbit-pig
         Type  _doc
         Host elasticsearch-master.logging.svc.cluster.local.
@@ -97,3 +107,4 @@ data:
         Retry_Limit False
         Suppress_Type_Name On
         Replace_Dots On
+        
