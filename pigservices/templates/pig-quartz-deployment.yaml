@@ -14,8 +14,10 @@ spec:
       labels:
        service: pig-quartz
     spec:
+      {{- if .Values.skywalking.enabled -}}
       initContainers:
         {{- toYaml .Values.initContainers | nindent 8 }}
+      {{- end }}
       containers:
         - name: pig-quartz
           image: "{{ .Values.pigquartz.images }}"
@@ -24,6 +26,10 @@ spec:
           env:
             {{- toYaml .Values.pigquartz.env | nindent 12 }}
           volumeMounts:
+            {{- if .Values.skywalking.enabled -}}
             {{- toYaml .Values.volumeMounts | nindent 12 }}
+            {{- end }}
       volumes:
+        {{- if .Values.skywalking.enabled -}}
         {{- toYaml .Values.volumes | nindent 8 }} 
+        {{- end }}

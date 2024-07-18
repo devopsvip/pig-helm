@@ -14,8 +14,10 @@ spec:
       labels:
        service: pig-codegen
     spec:
+      {{- if .Values.skywalking.enabled -}}
       initContainers:
         {{- toYaml .Values.initContainers | nindent 8 }}
+      {{- end }}
       containers:
         - name: pig-codegen
           image: "{{ .Values.pigcodegen.images }}"
@@ -24,6 +26,10 @@ spec:
           env:
             {{- toYaml .Values.pigcodegen.env | nindent 12 }}
           volumeMounts:
+            {{- if .Values.skywalking.enabled -}}
             {{- toYaml .Values.volumeMounts | nindent 12 }}
+            {{- end }}
       volumes:
+        {{- if .Values.skywalking.enabled -}}
         {{- toYaml .Values.volumes | nindent 8 }} 
+        {{- end }}
