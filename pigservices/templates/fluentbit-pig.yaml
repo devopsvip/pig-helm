@@ -13,8 +13,7 @@ spec:
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: fluentbit
-        app.kubernetes.io/instance: fluentbit
+         service: fluentbit
     spec:
       containers:
         - name: fluentbit
@@ -55,8 +54,7 @@ kind: ConfigMap
 metadata:
   name: fluentbit
   labels:
-    app.kubernetes.io/name: fluentbit
-    app.kubernetes.io/instance: fluentbit
+    service: fluentbit
 data:
   custom_parsers.conf: |
     [PARSER]
