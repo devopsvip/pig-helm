@@ -1,0 +1,108 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fluentbit-fluent-bit
+  labels:
+    app.kubernetes.io/name: fluent-bit
+    app.kubernetes.io/instance: fluentbit
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: fluent-bit
+      app.kubernetes.io/instance: fluentbit
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: fluent-bit
+        app.kubernetes.io/instance: fluentbit
+    spec:
+      serviceAccountName: fluentbit-fluent-bit
+      hostNetwork: false
+      dnsPolicy: ClusterFirst
+      containers:
+        - name: fluent-bit
+          image: "ccr.ccs.tencentyun.com/devopsvip/fluent-bit:3.1"
+          imagePullPolicy: IfNotPresent
+          command:
+            - /fluent-bit/bin/fluent-bit
+          args:
+            - --workdir=/fluent-bit/etc
+            - --config=/fluent-bit/etc/conf/fluent-bit.conf
+          ports:
+            - name: http
+              containerPort: 2020
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /api/v1/health
+              port: http
+          volumeMounts:
+            - name: config
+              mountPath: /fluent-bit/etc/conf
+            - name: piglogs
+              mountPath: /piglogs
+      volumes:
+        - name: config
+          configMap:
+            name: fluentbit-fluent-bit
+        - name: piglogs
+          persistentVolumeClaim:
+            claimName: piglogs
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluentbit-fluent-bit
+  labels:
+    app.kubernetes.io/name: fluent-bit
+    app.kubernetes.io/instance: fluentbit
+data:
+  custom_parsers.conf: |
+    [PARSER]
+        Name docker_no_time
+        Format json
+        Time_Keep Off
+        Time_Key time
+        Time_Format %Y-%m-%dT%H:%M:%S.%L
+
+  fluent-bit.conf: |
+    [SERVICE]
+        Daemon Off
+        Flush 1
+        Log_Level info
+        Parsers_File /fluent-bit/etc/parsers.conf
+        Parsers_File /fluent-bit/etc/conf/custom_parsers.conf
+        HTTP_Server On
+        HTTP_Listen 0.0.0.0
+        HTTP_Port 2020
+        Health_Check On
+
+    [INPUT]
+        Name tail
+        Path /piglogs/*.log
+        multiline.parser docker, cri
+        Tag pig.*
+        Mem_Buf_Limit 5MB
+        Skip_Long_Lines On
+
+    [OUTPUT]
+        Name es
+        Match pig.*
+        Index fluent-bit-pig
+        Type  _doc
+        Host elasticsearch-master.logging.svc.cluster.local.
+        Port 9200
+        HTTP_User elastic
+        HTTP_Passwd fYC9UUf307Pdz4T9
+        tls On
+        tls.verify Off
+        Logstash_Format On
+        Logstash_Prefix logstash
+        Retry_Limit False
+        Suppress_Type_Name On
+        Replace_Dots On
