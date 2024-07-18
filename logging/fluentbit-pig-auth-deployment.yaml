@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fluentbit-pig-auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: fluentbit-pig-auth
+  template:
+    metadata:
+      labels:
+         service: fluentbit-pig-auth
+    spec:
+      containers:
+        - name: fluentbit-pig-auth
+          image: "ccr.ccs.tencentyun.com/devopsvip/fluent-bit:3.1"
+          imagePullPolicy: IfNotPresent
+          command:
+            - /fluent-bit/bin/fluent-bit
+          args:
+            - --workdir=/fluent-bit/etc
+            - --config=/fluent-bit/etc/conf/fluent-bit.conf
+          ports:
+            - name: http
+              containerPort: 2020
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /api/v1/health
+              port: http
+          volumeMounts:
+            - name: config
+              mountPath: /fluent-bit/etc/conf
+            - name: piglogs
+              mountPath: /piglogs
+      volumes:
+        - name: config
+          configMap:
+            name: fluentbit-pig-auth
+        - name: piglogs
+          persistentVolumeClaim:
+            claimName: piglogs
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluentbit-pig-auth
+  labels:
+    service: fluentbit-pig-auth
+data:
+  custom_parsers.conf: |
+    [PARSER]
+        Name docker_no_time
+        Format json
+        Time_Keep Off
+        Time_Key time
+        Time_Format %Y-%m-%dT%H:%M:%S.%L
+
+  fluent-bit.conf: |
+    [SERVICE]
+        Daemon Off
+        Flush 1
+        Log_Level info
+        Parsers_File /fluent-bit/etc/parsers.conf
+        Parsers_File /fluent-bit/etc/conf/custom_parsers.conf
+        HTTP_Server On
+        HTTP_Listen 0.0.0.0
+        HTTP_Port 2020
+        Health_Check On
+
+    [INPUT]
+        Name tail
+        Path /piglogs/pig-auth/*.log
+        Path_Key filename
+        Tag piglogs
+        Mem_Buf_Limit 5MB
+        Skip_Long_Lines On
+        Parser json
+
+    [OUTPUT]
+        Name es
+        Match piglogs
+        Index fluentbit-pig-auth
+        Type  _doc
+        Host elasticsearch-master.logging.svc.cluster.local.
+        Port 9200
+        HTTP_User elastic
+        HTTP_Passwd admin123
+        tls On
+        tls.verify Off
+        Retry_Limit False
+        Suppress_Type_Name On
+        Replace_Dots On
+        

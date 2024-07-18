@@ -14,10 +14,32 @@ spec:
       labels:
        service: pig-auth
     spec:
+      {{- if .Values.skywalking.enabled -}}
+      initContainers:
+        {{- toYaml .Values.initContainers | nindent 8 }}
+      {{- end }}
       containers:
         - name: pig-auth
           image: "{{ .Values.pigauth.images }}"
           ports:
             {{- toYaml .Values.pigauth.containerPort | nindent 12 }}
           env:
+            {{- if .Values.skywalking.enabled -}}
+            # 从Dockerfile把参数拿出来替换加上skywalking配置
+            - name: JAVA_OPTS
+              value: "-Xms512m -Xmx8192m  -javaagent:/skywalking-agent/agent/skywalking-agent.jar -Dskywalking.agent.service_name=pig-auth -Dskywalking.collector.backend_service=skywalking-oap.skywalking.svc.cluster.local:11800 "
+            {{- end }}
             {{- toYaml .Values.pigauth.env | nindent 12 }}
+          volumeMounts:
+            {{- if .Values.skywalking.enabled -}}
+            {{- toYaml .Values.volumeMounts | nindent 12 }}
+            {{- end }}
+            - name: piglogs
+              mountPath: /pig-auth/logs/
+      volumes:
+        {{- if .Values.skywalking.enabled -}}
+        {{- toYaml .Values.volumes | nindent 8 }} 
+        {{- end }}
+        - name: piglogs
+          persistentVolumeClaim:
+            claimName: piglogs

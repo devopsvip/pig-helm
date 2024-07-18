@@ -194,3 +194,18 @@ pigui:
       - name: "web"
         port: 80
         targetPort: 80
+skywalking:
+  enabled: false
+initContainers:
+  - name: init-skywalking-agent
+    image: ccr.ccs.tencentyun.com/devopsvip/skywalking-java-agent:9.2.0-java17
+    command: ["sh", "-c", "cp -R /skywalking/agent/ /skywalking-agent; rm -fr /skywalking-agent/agent/plugins/apm-grpc-1.x-plugin-9.2.0.jar"]
+    volumeMounts:
+      - name: skywalking-agent
+        mountPath: /skywalking-agent
+volumeMounts:
+  - name: skywalking-agent
+    mountPath: /skywalking-agent
+volumes:
+  - name: skywalking-agent
+    emptyDir: {}
