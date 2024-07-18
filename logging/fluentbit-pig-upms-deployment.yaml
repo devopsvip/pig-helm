@@ -93,8 +93,6 @@ data:
         HTTP_Passwd admin123
         tls On
         tls.verify Off
-        Logstash_Format On
-        Logstash_Prefix logstash
         Retry_Limit False
         Suppress_Type_Name On
         Replace_Dots On
