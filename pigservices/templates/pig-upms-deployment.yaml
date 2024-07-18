@@ -34,7 +34,12 @@ spec:
             {{- if .Values.skywalking.enabled -}}
             {{- toYaml .Values.volumeMounts | nindent 12 }}
             {{- end }}
+            - name: piglogs
+              mountPath: /pig-upms-biz/logs/
       volumes:
         {{- if .Values.skywalking.enabled -}}
         {{- toYaml .Values.volumes | nindent 8 }} 
         {{- end }}
+        - name: piglogs
+          persistentVolumeClaim:
+            claimName: piglogs
