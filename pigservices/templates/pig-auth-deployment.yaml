@@ -34,7 +34,6 @@ spec:
             {{- if .Values.skywalking.enabled -}}
             {{- toYaml .Values.volumeMounts | nindent 12 }}
             {{- end }}
-            volumeMounts:
             - name: piglogs
               mountPath: /var/lib/jenkins
       volumes:
