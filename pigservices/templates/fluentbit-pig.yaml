@@ -2,9 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: fluentbit
-  labels:
-    app.kubernetes.io/name: fluentbit
-    app.kubernetes.io/instance: fluentbit
 spec:
   replicas: 1
   selector:
