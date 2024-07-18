@@ -61,7 +61,7 @@ data:
         Time_Key time
         Time_Format %Y-%m-%dT%H:%M:%S.%L
 
-  fluentbit.conf: |
+  fluent-bit.conf: |
     [SERVICE]
         Daemon Off
         Flush 1
